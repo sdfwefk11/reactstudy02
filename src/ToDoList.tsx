@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 /* function ToDoList() {
@@ -36,13 +35,17 @@ import { useForm } from "react-hook-form";
 export default ToDoList; */
 
 function ToDoList() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState } = useForm();
   const onValid = (data: any) => {
     console.log(data);
   };
+  console.log(formState.errors);
   return (
     <div>
-      <form onSubmit={handleSubmit(onValid)}>
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={handleSubmit(onValid)}
+      >
         <input
           {...register("Email", { required: true })}
           placeholder="Email"
@@ -52,15 +55,21 @@ function ToDoList() {
           placeholder="FirstName"
         ></input>
         <input
-          {...register("LastName", { required: true })}
+          {...register("LastName", { required: true, minLength: 10 })}
           placeholder="LastName"
         ></input>
         <input
-          {...register("UserName", { required: true })}
+          {...register("UserName", { required: true, minLength: 5 })}
           placeholder="UserName"
         ></input>
         <input
-          {...register("Password", { required: true })}
+          {...register("Password", {
+            required: "Password is required",
+            minLength: {
+              value: 5,
+              message: "Your password is too short.",
+            },
+          })}
           placeholder="EmaPasswordil"
         ></input>
         <input
