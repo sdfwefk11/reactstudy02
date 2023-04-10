@@ -33,13 +33,20 @@ import { useForm } from "react-hook-form";
 }
 
 export default ToDoList; */
+interface FormType {
+  [key: string]: string;
+}
 
 function ToDoList() {
-  const { register, handleSubmit, formState } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormType>();
   const onValid = (data: any) => {
     console.log(data);
   };
-  console.log(formState.errors);
+
   return (
     <div>
       <form
@@ -47,9 +54,16 @@ function ToDoList() {
         onSubmit={handleSubmit(onValid)}
       >
         <input
-          {...register("Email", { required: true })}
+          {...register("Email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+              message: "Only naver.com emails allowed",
+            },
+          })}
           placeholder="Email"
         ></input>
+        <span>{errors?.email?.message}</span>
         <input
           {...register("FirstName", { required: true })}
           placeholder="FirstName"
@@ -59,7 +73,11 @@ function ToDoList() {
           placeholder="LastName"
         ></input>
         <input
-          {...register("UserName", { required: true, minLength: 5 })}
+          {...register("UserName", {
+            required: true,
+            minLength: 5,
+            maxLength: 20,
+          })}
           placeholder="UserName"
         ></input>
         <input
