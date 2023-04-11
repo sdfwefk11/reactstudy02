@@ -33,8 +33,12 @@ import { useForm } from "react-hook-form";
 }
 
 export default ToDoList; */
-interface FormType {
-  [key: string]: string;
+interface IForm {
+  email: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  password: string;
 }
 
 function ToDoList() {
@@ -42,11 +46,14 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>();
+  } = useForm<IForm>({
+    defaultValues: {
+      email: "@naver.com",
+    },
+  });
   const onValid = (data: any) => {
     console.log(data);
   };
-
   return (
     <div>
       <form
@@ -54,7 +61,7 @@ function ToDoList() {
         onSubmit={handleSubmit(onValid)}
       >
         <input
-          {...register("Email", {
+          {...register("email", {
             required: "Email is required",
             pattern: {
               value: /^[A-Za-z0-9._%+-]+@naver.com$/,
@@ -65,36 +72,35 @@ function ToDoList() {
         ></input>
         <span>{errors?.email?.message}</span>
         <input
-          {...register("FirstName", { required: true })}
+          {...register("firstName", { required: true })}
           placeholder="FirstName"
         ></input>
+        <span>{errors?.firstName?.message}</span>
         <input
-          {...register("LastName", { required: true, minLength: 10 })}
+          {...register("lastName", { required: true, minLength: 10 })}
           placeholder="LastName"
         ></input>
+        <span>{errors?.lastName?.message}</span>
         <input
-          {...register("UserName", {
+          {...register("userName", {
             required: true,
             minLength: 5,
             maxLength: 20,
           })}
           placeholder="UserName"
         ></input>
+        <span>{errors?.userName?.message}</span>
         <input
-          {...register("Password", {
+          {...register("password", {
             required: "Password is required",
             minLength: {
               value: 5,
               message: "Your password is too short.",
             },
           })}
-          placeholder="EmaPasswordil"
+          placeholder="Password"
         ></input>
-        <input
-          {...register("Password1", { required: true })}
-          placeholder="Password1"
-        ></input>
-
+        <span>{errors?.password?.message}</span>
         <button>Add</button>
       </form>
     </div>
