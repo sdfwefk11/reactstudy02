@@ -39,6 +39,7 @@ interface IForm {
   lastName: string;
   userName: string;
   password: string;
+  password1: string;
 }
 
 function ToDoList() {
@@ -46,13 +47,16 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
-  const onValid = (data: any) => {
-    console.log(data);
+  const onValid = (data: IForm) => {
+    if (data.password !== data.password1) {
+      setError("password", { message: "Password are not the same" });
+    }
   };
   return (
     <div>
@@ -101,6 +105,17 @@ function ToDoList() {
           placeholder="Password"
         ></input>
         <span>{errors?.password?.message}</span>
+        <input
+          {...register("password1", {
+            required: "Password1 is required",
+            minLength: {
+              value: 5,
+              message: "Your password1 is too short.",
+            },
+          })}
+          placeholder="Password1"
+        ></input>
+        <span>{errors?.password1?.message}</span>
         <button>Add</button>
       </form>
     </div>
