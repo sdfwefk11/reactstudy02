@@ -40,6 +40,7 @@ interface IForm {
   userName: string;
   password: string;
   password1: string;
+  extraError?: string;
 }
 
 function ToDoList() {
@@ -55,8 +56,13 @@ function ToDoList() {
   });
   const onValid = (data: IForm) => {
     if (data.password !== data.password1) {
-      setError("password", { message: "Password are not the same" });
+      setError(
+        "password1",
+        { message: "Password are not the same" },
+        { shouldFocus: true }
+      );
     }
+    // setError("extraError", { message: "Server offline" });
   };
   return (
     <div>
@@ -76,20 +82,25 @@ function ToDoList() {
         ></input>
         <span>{errors?.email?.message}</span>
         <input
-          {...register("firstName", { required: true })}
+          {...register("firstName", { required: "write here" })}
           placeholder="FirstName"
         ></input>
         <span>{errors?.firstName?.message}</span>
         <input
-          {...register("lastName", { required: true, minLength: 10 })}
+          {...register("lastName", { required: "write here", minLength: 10 })}
           placeholder="LastName"
         ></input>
         <span>{errors?.lastName?.message}</span>
         <input
           {...register("userName", {
-            required: true,
-            minLength: 5,
-            maxLength: 20,
+            required: "write here",
+            minLength: { value: 5, message: "User name is too short 5~10" },
+            maxLength: { value: 10, message: "User name is too long 5~10" },
+            validate: {
+              nojs: (value) => (value.includes("js") ? "no js allowed" : true),
+              nopepsi: (value) =>
+                value.includes("pepsi") ? "no pepsi allowed" : true,
+            },
           })}
           placeholder="UserName"
         ></input>
@@ -117,6 +128,7 @@ function ToDoList() {
         ></input>
         <span>{errors?.password1?.message}</span>
         <button>Add</button>
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
