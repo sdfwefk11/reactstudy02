@@ -1,8 +1,8 @@
 import { useSetRecoilState } from "recoil";
-import { IToDo, toDostate } from "./atoms";
+import { IToDo, toDoState } from "./atoms";
 
 function ToDo({ text, category, id }: IToDo) {
-  const setToDos = useSetRecoilState(toDostate);
+  const setToDos = useSetRecoilState(toDoState);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
